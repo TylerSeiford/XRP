@@ -2,15 +2,20 @@ package frc.robot;
 
 import frc.robot.commands.ArmCommands;
 import frc.robot.commands.DriveCommands;
+import frc.robot.sensors.Accelerometer;
+import frc.robot.sensors.Gyro;
+import frc.robot.sensors.Rangefinder;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Rangefinder;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
   private final Drive drive = new Drive();
   private final DriveCommands driveCommands = new DriveCommands(drive);
   private final Arm arm = new Arm();
+
+  private final Accelerometer accelerometer = new Accelerometer();
+  private final Gyro gyro = new Gyro();
   private final Rangefinder rangefinder = new Rangefinder();
 
   private final CommandXboxController controller = new CommandXboxController(0);

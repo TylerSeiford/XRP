@@ -2,10 +2,10 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 
-import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.xrp.XRPGyro;
 import edu.wpi.first.wpilibj.xrp.XRPMotor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -23,10 +23,6 @@ public class Drive extends SubsystemBase {
   private final Encoder rightEncoder = new Encoder(6, 7);
 
   private final DifferentialDrive differentialDrive = new DifferentialDrive(leftMotor::set, rightMotor::set);
-
-  private final XRPGyro gyro = new XRPGyro();
-
-  private final BuiltInAccelerometer accelerometer = new BuiltInAccelerometer();
 
   public Drive() {
     rightMotor.setInverted(true);
@@ -47,57 +43,13 @@ public class Drive extends SubsystemBase {
     rightEncoder.reset();
   }
 
-  @AutoLogOutput(key = "Drive/LeftEncoderCount")
-  public int getLeftEncoderCount() {
-    return leftEncoder.get();
+  @AutoLogOutput(key = "Drive/LeftDistance")
+  public Distance getLeft() {
+    return Units.Meters.of(leftEncoder.getDistance());
   }
 
-  @AutoLogOutput(key = "Drive/RightEncoderCount")
-  public int getRightEncoderCount() {
-    return rightEncoder.get();
-  }
-
-  @AutoLogOutput(key = "Drive/LeftDistanceMeters")
-  public double getLeftDistanceMeters() {
-    return leftEncoder.getDistance();
-  }
-
-  @AutoLogOutput(key = "Drive/RightDistanceMeters")
-  public double getRightDistanceMeters() {
-    return rightEncoder.getDistance();
-  }
-
-  @AutoLogOutput(key = "Accelerometer/X")
-  public double getAccelX() {
-    return accelerometer.getX();
-  }
-
-  @AutoLogOutput(key = "Accelerometer/Y")
-  public double getAccelY() {
-    return accelerometer.getY();
-  }
-
-  @AutoLogOutput(key = "Accelerometer/Z")
-  public double getAccelZ() {
-    return accelerometer.getZ();
-  }
-
-  @AutoLogOutput(key = "Gyro/X")
-  public double getGyroAngleX() {
-    return gyro.getAngleX();
-  }
-
-  @AutoLogOutput(key = "Gyro/Y")
-  public double getGyroAngleY() {
-    return gyro.getAngleY();
-  }
-
-  @AutoLogOutput(key = "Gyro/Z")
-  public double getGyroAngleZ() {
-    return gyro.getAngleZ();
-  }
-
-  public void resetGyro() {
-    gyro.reset();
+  @AutoLogOutput(key = "Drive/RightDistance")
+  public Distance getRight() {
+    return Units.Meters.of(rightEncoder.getDistance());
   }
 }
