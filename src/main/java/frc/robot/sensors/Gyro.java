@@ -2,6 +2,8 @@ package frc.robot.sensors;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -23,6 +25,16 @@ public class Gyro {
   @AutoLogOutput(key = "Gyro/AngleZ")
   public Angle getAngleZ() {
     return Units.Degrees.of(gyro.getAngleZ());
+  }
+
+  @AutoLogOutput(key = "Gyro/Rotation2d")
+  public Rotation2d getRotation2d() {
+    return new Rotation2d(getAngleZ());
+  }
+
+  @AutoLogOutput(key = "Gyro/Rotation3d")
+  public Rotation3d getRotation3d() {
+    return new Rotation3d(getAngleY(), getAngleX().unaryMinus(), getAngleZ());
   }
 
   @AutoLogOutput(key = "Gyro/RateX")

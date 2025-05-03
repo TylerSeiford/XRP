@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Encoder;
@@ -10,11 +11,11 @@ import edu.wpi.first.wpilibj.xrp.XRPMotor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drive extends SubsystemBase {
-  private static final class Constants {
-    public static final double GEAR_RATIO = (30.0 / 14.0) * (28.0 / 16.0) * (36.0 / 9.0) * (26.0 / 8.0); // 48.75:1
-    public static final int COUNTS_PER_MOTOR_ROTATION = 12;
-    public static final double WHEEL_DIAMETER = 60.0 / 1000;
-  }
+  private static final double GEAR_RATIO = (30.0 / 14.0) * (28.0 / 16.0) * (36.0 / 9.0) * (26.0 / 8.0); // 48.75:1
+  private static final int COUNTS_PER_MOTOR_ROTATION = 12;
+  private static final Distance WHEEL_DIAMETER = Units.Millimeters.of(60);
+  private static final Distance TRACK_WIDTH = Units.Millimeters.of(155);
+  public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
 
   private final XRPMotor leftMotor = new XRPMotor(0);
   private final XRPMotor rightMotor = new XRPMotor(1);
@@ -28,9 +29,9 @@ public class Drive extends SubsystemBase {
     rightMotor.setInverted(true);
 
     leftEncoder.setDistancePerPulse(
-        Math.PI * Constants.WHEEL_DIAMETER / Constants.COUNTS_PER_MOTOR_ROTATION / Constants.GEAR_RATIO);
+        Math.PI * WHEEL_DIAMETER.in(Units.Meters) / COUNTS_PER_MOTOR_ROTATION / GEAR_RATIO);
     rightEncoder.setDistancePerPulse(
-        Math.PI * Constants.WHEEL_DIAMETER / Constants.COUNTS_PER_MOTOR_ROTATION / Constants.GEAR_RATIO);
+        Math.PI * WHEEL_DIAMETER.in(Units.Meters) / COUNTS_PER_MOTOR_ROTATION / GEAR_RATIO);
     resetEncoders();
   }
 
@@ -44,12 +45,12 @@ public class Drive extends SubsystemBase {
   }
 
   @AutoLogOutput(key = "Drive/LeftDistance")
-  public Distance getLeft() {
+  public Distance getLeftDistance() {
     return Units.Meters.of(leftEncoder.getDistance());
   }
 
   @AutoLogOutput(key = "Drive/RightDistance")
-  public Distance getRight() {
+  public Distance getRightDistance() {
     return Units.Meters.of(rightEncoder.getDistance());
   }
 }
