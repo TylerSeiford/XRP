@@ -8,6 +8,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator3d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N4;
@@ -19,12 +20,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class PoseEstimator extends SubsystemBase {
   private final DifferentialDrivePoseEstimator3d estimator;
   private final Supplier<Rotation3d> gyroAngle;
-  private final Supplier<Distance> leftDistance, rightDistance;
+  private final Supplier<Distance> leftDistance, rightDistance, rangeFinderDistance;
 
-  public PoseEstimator(DifferentialDriveKinematics kinematics, Supplier<Rotation3d> gyroAngle, Supplier<Distance> leftDistance, Supplier<Distance> rightDistance) {
+  public PoseEstimator(DifferentialDriveKinematics kinematics, Supplier<Rotation3d> gyroAngle,
+      Supplier<Distance> leftDistance, Supplier<Distance> rightDistance, Supplier<Distance> rangeFinderDistance) {
     this.gyroAngle = gyroAngle;
     this.leftDistance = leftDistance;
     this.rightDistance = rightDistance;
+    this.rangeFinderDistance = rangeFinderDistance;
     estimator = new DifferentialDrivePoseEstimator3d(
         kinematics,
         gyroAngle.get(),
@@ -59,6 +62,12 @@ public class PoseEstimator extends SubsystemBase {
   @AutoLogOutput(key = "PoseEstimator/Pose")
   public Pose3d getPose() {
     return estimator.getEstimatedPosition();
+  }
+
+  @AutoLogOutput(key = "PoseEstimator/RangefinderPose")
+  public Pose3d getRangefinderPose() {
+    return estimator.getEstimatedPosition().transformBy(
+        new Transform3d(rangeFinderDistance.get(), Units.Meters.zero(), Units.Meters.zero(), Rotation3d.kZero));
   }
 
   public Command resetAngle() {

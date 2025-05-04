@@ -10,16 +10,17 @@ import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
-  private final Drive drive = new Drive();
+  private final Accelerometer accelerometer = new Accelerometer();
   private final Gyro gyro = new Gyro();
+  private final Rangefinder rangefinder = new Rangefinder();
+
+  private final Drive drive = new Drive();
   private final PoseEstimator poseEstimator = new PoseEstimator(Drive.KINEMATICS, gyro::getRotation3d,
-      drive::getLeftDistance, drive::getRightDistance);
+      drive::getLeftDistance, drive::getRightDistance, rangefinder::getDistance);
   private final DriveCommands driveCommands = new DriveCommands(drive);
 
   private final Arm arm = new Arm();
 
-  private final Accelerometer accelerometer = new Accelerometer();
-  private final Rangefinder rangefinder = new Rangefinder();
 
   private final CommandXboxController controller = new CommandXboxController(0);
 
