@@ -7,6 +7,7 @@ import frc.robot.sensors.Gyro;
 import frc.robot.sensors.Rangefinder;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
@@ -33,12 +34,9 @@ public class RobotContainer {
     controller.leftStick().onTrue(driveCommands.reverse());
     controller.start().onTrue(poseEstimator.resetAngle());
 
-    controller.a()
-        .onTrue(ArmCommands.angleCommand(arm, 0))
-        .onFalse(ArmCommands.angleCommand(arm, 180));
-
-    controller.b()
-        .onTrue(ArmCommands.angleCommand(arm, 90))
-        .onFalse(ArmCommands.angleCommand(arm, 180));
+    arm.setDefaultCommand(ArmCommands.adjustCommand(arm, () -> Units.Degrees.of(controller.getRightY() * 10)));
+    controller.rightStick().onTrue(ArmCommands.angleCommand(arm, Units.Degrees.of(180)));
+    controller.a().onTrue(ArmCommands.angleCommand(arm, Units.Degrees.of(0)));
+    controller.b().onTrue(ArmCommands.angleCommand(arm, Units.Degrees.of(90)));
   }
 }
